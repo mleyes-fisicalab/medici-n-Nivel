@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Cuaderno interactivo de Instrumentación Industrial: medición de nivel hidrostática, ultrasónica y capacitiva, y lazo de control de nivel. Universidad del Valle, sede Cartago.">
+<title>Medición de Nivel Interactiva</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="author" content="Dra. María Elena Leyes">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/fuentes.css">
+<link rel="stylesheet" href="css/estilos.css">
+
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<div class="app">
+<aside class="side" id="side" aria-label="Índice del cuaderno">
+  <div class="side-in">
+    <div class="brand">
+      <span class="uv">Universidad del Valle</span>
+      <div class="mark">
+        <img src="img/logo-nivel.svg" alt="" width="34" height="34">
+        <b>Medición<br>de Nivel</b>
+      </div>
+      <small>Instrumentación Industrial · 2026-2</small>
+    </div>
+    <nav class="toc" id="toc"></nav>
+    <div class="side-foot">Dra. María Elena Leyes<br>Universidad del Valle · Sede Cartago</div>
+  </div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="main">
+  <header class="top">
+    <button class="ibtn menu-btn" id="menuBtn" aria-label="Abrir índice"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="where"><small id="secName">Presentación</small><b id="pageName">Portada</b></div>
+    <span class="count" id="count">1 / 20</span>
+    <button class="ibtn" id="prevBtn" aria-label="Página anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="ibtn" id="nextBtn" aria-label="Página siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="ibtn" id="themeBtn" aria-label="Cambiar tema claro u oscuro"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></button>
+    <div class="progress"><i id="prog"></i></div>
+  </header>
+
+  <div class="book" id="book">
+<!-- ================= PORTADA ================= -->
+<section class="page" id="portada" data-sec="Presentación" data-title="Portada">
+  <div class="hero">
+    <p class="eyebrow">Universidad del Valle · Sede Cartago · Tecnología en Electrónica</p>
+    <h1>Medición de nivel en <em>procesos industriales</em></h1>
+    <p class="lead">Cuaderno interactivo de prácticas experimentales para Instrumentación Industrial. Recorre los métodos de medición de nivel, desde la presión hidrostática hasta el tiempo de vuelo y la capacitancia, y cierra el lazo con el controlador y la válvula de control.</p>
+    <div class="sensors">
+      <div class="sensor" style="--c:var(--c-rtd)"><h3>Hidrostático</h3><div class="k">9,76 kPa</div><div class="u">por metro de agua con la gravedad de Cartago · ΔP = ρ g h</div></div>
+      <div class="sensor" style="--c:var(--c-tc)"><h3>Ultrasónico</h3><div class="k">≈ 346 m/s</div><div class="u">velocidad del sonido en aire a 25 °C · cambia 0,6 m/s por cada °C</div></div>
+      <div class="sensor" style="--c:var(--c-ntc)"><h3>Capacitivo</h3><div class="k">≈ 46 pF/m</div><div class="u">sonda coaxial de 20/6 mm en aire · la capacitancia crece con εr</div></div>
+    </div>
+    <h2>Ruta del cuaderno</h2>
+    <div class="route" id="route"></div>
+    <div class="byline">
+      <div><b>Autora</b>Dra. María Elena Leyes</div>
+      <div><b>Asignatura</b>Instrumentación Industrial</div>
+      <div><b>Programa</b>Tecnología en Electrónica</div>
+      <div><b>Periodo</b>Agosto – diciembre 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GUÍA ================= -->
+<section class="page" id="guia" data-sec="Presentación" data-title="Guía de la práctica" hidden>
+  <p class="eyebrow">Guía de laboratorio</p>
+  <h1>Medición de nivel por presión, tiempo de vuelo y capacitancia</h1>
+  <p class="lead">La práctica tiene dos partes: una exploración guiada con simuladores y un laboratorio virtual en el que cada estudiante recibe un banco con un producto, un montaje y unos instrumentos propios, como ocurre en planta.</p>
+  <h2>Objetivo general</h2>
+  <p>Seleccionar, caracterizar y calibrar instrumentos de medición continua de nivel basados en la presión hidrostática, el tiempo de vuelo ultrasónico y la capacitancia, e integrarlos en un lazo de control con simbología ISA-5.1.</p>
+  <h2>Objetivos específicos</h2>
+  <ol>
+    <li>Clasificar los métodos de medición de nivel y relacionar el nivel con el volumen y la masa almacenados según la geometría del tanque.</li>
+    <li>Determinar la densidad de un producto desconocido y la supresión de cero de un transmisor de presión diferencial, y recalcular su rango de calibración.</li>
+    <li>Caracterizar un sensor ultrasónico por tiempo de vuelo y cuantificar el error causado por la temperatura del aire.</li>
+    <li>Caracterizar una sonda capacitiva leída con un oscilador 555 y obtener la permitividad relativa del producto.</li>
+    <li>Analizar un lazo de control de nivel con sus alarmas y la acción de falla de la válvula, y redactar un informe técnico en PDF.</li>
+  </ol>
+  <h2>Equipos de referencia</h2>
+  <p>El laboratorio virtual reproduce este montaje. Si la sede cuenta con los equipos, la misma guía sirve para la práctica presencial.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Equipo</th><th>Especificación sugerida</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td>Tanque de acrílico</td><td>Columna de 1,6 m con regla milimetrada, toma en el fondo y válvula de drenaje</td><td>Prácticas 1, 2 y 3</td></tr>
+      <tr><td>Transmisor de presión diferencial</td><td>0–15 kPa, salida 4–20 mA, calibrado para agua de 0 a 1,5 m</td><td>Práctica 1</td></tr>
+      <tr><td>Manómetro digital diferencial</td><td>0–20 kPa, resolución 0,01 kPa</td><td>Práctica 1</td></tr>
+      <tr><td>Alternativa de bajo costo</td><td>MPX5010DP con transmisor de corriente XTR115 y resistencia de 250 Ω</td><td>Práctica 1</td></tr>
+      <tr><td>Sensor ultrasónico</td><td>JSN-SR04T impermeable (0,25–4,5 m) o HC-SR04, a 1,600 m del fondo</td><td>Práctica 2</td></tr>
+      <tr><td>Sensor de temperatura del aire</td><td>DS18B20 o NTC de 10 kΩ dentro del tanque</td><td>Práctica 2</td></tr>
+      <tr><td>Sonda capacitiva coaxial</td><td>Tubo de 20 mm, varilla central de 6 mm, longitud 1,20 m</td><td>Práctica 3</td></tr>
+      <tr><td>Oscilador</td><td>Temporizador 555 astable, R₁ = 10 kΩ, R₂ = 100 kΩ</td><td>Práctica 3</td></tr>
+      <tr><td>Microcontrolador</td><td>Arduino UNO o ESP32; frecuencímetro u osciloscopio</td><td>Prácticas 2 y 3</td></tr>
+    </tbody>
+  </table></div>
+  <h2>Metodología</h2>
+  <ol class="steps">
+    <li><strong>Antes de la sesión.</strong> Lee las secciones I a V y explora los simuladores. Responde las preguntas orientadoras de cada práctica.</li>
+    <li><strong>Durante la sesión.</strong> Identifícate en el laboratorio virtual con tu código estudiantil. Ese código define tu banco, así que tus datos serán distintos a los de tus compañeros.</li>
+    <li><strong>Registro.</strong> Toma las lecturas que pide cada práctica, ejecuta el análisis y escribe tu interpretación en los campos de cada página.</li>
+    <li><strong>Después de la sesión.</strong> Resuelve los ejercicios y descarga el informe en PDF desde la sección VIII.</li>
+  </ol>
+  <div class="callout warn"><b>Seguridad</b><p>En la práctica presencial usa agua o salmuera, nunca combustibles. Alimenta los circuitos con 5 V y mantén las conexiones lejos del agua. No te subas a los tanques para leer la regla y limpia de inmediato cualquier derrame: el piso mojado del laboratorio es el riesgo más frecuente.</p></div>
+</section>
+
+<!-- ================= CADENA ================= -->
+<section class="page" id="cadena" data-sec="I · Fundamentos" data-title="Variable de proceso y lazo de nivel" hidden>
+  <p class="eyebrow">Sección I · Fundamentos</p>
+  <h1>El nivel como variable de proceso</h1>
+  <p class="lead">El nivel es la altura de la superficie de un líquido o de un sólido sobre una referencia. Se mide para conocer el inventario de un tanque, para proteger bombas que no deben trabajar en seco y para evitar reboses, que en la industria química y de alimentos son accidentes graves.</p>
+  <h2>Del tanque a la válvula</h2>
+  <div class="grid3">
+    <div class="card"><h3 style="margin-top:0">Elemento primario y transmisor</h3><p>Detectan el nivel por un efecto físico (presión, eco, capacitancia) y lo envían como 4–20 mA. En ISA-5.1 se identifican como <span class="tag">LE</span> y <span class="tag">LT</span>.</p></div>
+    <div class="card"><h3 style="margin-top:0">Controlador</h3><p>Compara el nivel medido con el punto de consigna y calcula la salida hacia la válvula. Es el <span class="tag">LIC</span>: indicador y controlador de nivel.</p></div>
+    <div class="card"><h3 style="margin-top:0">Elemento final</h3><p>La válvula de control <span class="tag">LV</span>, con su convertidor I/P y su posicionador, regula el caudal de entrada o de salida del tanque.</p></div>
+  </div>
+  <h2>Recorrido de la señal</h2>
+  <p>Mueve el nivel del tanque y observa la señal en cada etapa. El transmisor de presión diferencial está en el fondo de un tanque abierto de agua y calibrado de 0 a 4 m. El controlador proporcional tiene consigna de 2,5 m y regula la válvula de entrada. Toca cada bloque para ver su función.</p>
+  <div class="card">
+    <div class="ctrl"><label for="ch-T">Nivel del tanque <output id="ch-To"></output></label><input type="range" id="ch-T" min="0" max="4" step="0.01" value="1.80"></div>
+    <div class="chain" id="chain">
+      <button class="node on" data-i="0"><span class="tagisa">Proceso</span><b>Tanque de agua</b><span class="val" id="ch-v0">—</span></button>
+      <button class="node" data-i="1"><span class="tagisa">LE-301</span><b>Diafragma de presión diferencial</b><span class="val" id="ch-v1">—</span></button>
+      <button class="node" data-i="2"><span class="tagisa">LT-301</span><b>Transmisor 4–20 mA</b><span class="val" id="ch-v2">—</span></button>
+      <button class="node" data-i="3"><span class="tagisa">LIC-301</span><b>Indicador y controlador</b><span class="val" id="ch-v3">—</span></button>
+      <button class="node" data-i="4"><span class="tagisa">LV-301</span><b>Válvula de entrada</b><span class="val" id="ch-v4">—</span></button>
+    </div>
+    <p id="ch-desc" class="muted" style="margin:0"></p>
+  </div>
+  <div class="callout"><b>Para el informe</b><p>Dibuja el P&amp;ID de este lazo con la simbología ISA-5.1: tanque, LT-301, LIC-301 en la sala de control, I/P y LV-301 en campo. Indica el tipo de señal en cada línea y la acción de falla de la válvula.</p></div>
+</section>
+
+<!-- ================= MÉTODOS ================= -->
+<section class="page" id="metodos" data-sec="I · Fundamentos" data-title="Métodos, volumen y masa" hidden>
+  <p class="eyebrow">Sección I · Fundamentos</p>
+  <h1>Métodos de medición y aforo del tanque</h1>
+  <p class="lead">Los métodos se dividen en <em class="term">directos</em>, que observan la superficie del líquido, e <em class="term">indirectos</em>, que miden otra magnitud relacionada con el nivel. También se distingue entre medición <em class="term">continua</em> y detección de <em class="term">punto</em> (alto, bajo), usada en alarmas y protecciones.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Método</th><th>Principio</th><th>Tipo</th><th>Ventajas</th><th>Limitaciones</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Visor o mirilla</strong></td><td>Tubo transparente comunicado con el tanque (vasos comunicantes).</td><td>Directo, local</td><td>Simple, sin energía.</td><td>No transmite; se ensucia; frágil.</td></tr>
+      <tr><td><strong>Flotador y desplazador</strong></td><td>Empuje de Arquímedes sobre un cuerpo: el flotador sigue la superficie; el desplazador cambia su peso aparente.</td><td>Directo / indirecto</td><td>Robusto, bajo costo.</td><td>Partes móviles; sensible a la densidad (desplazador).</td></tr>
+      <tr><td><strong>Hidrostático (presión diferencial)</strong></td><td>La presión en el fondo es \(\rho g h\).</td><td>Indirecto, continuo</td><td>El más usado; sirve en tanques abiertos y cerrados.</td><td>Depende de la densidad; contacto con el producto.</td></tr>
+      <tr><td><strong>Burbujeo</strong></td><td>Un tubo sumergido inyecta aire; la presión del aire iguala \(\rho g h\).</td><td>Indirecto, continuo</td><td>El transmisor no toca el producto (lodos, corrosivos).</td><td>Consume aire; el tubo se obstruye.</td></tr>
+      <tr><td><strong>Capacitivo</strong></td><td>La sonda y el tanque forman un condensador cuyo dieléctrico cambia con el nivel.</td><td>Indirecto, continuo o de punto</td><td>Sin partes móviles; sólidos y líquidos.</td><td>Depende de εr; adherencias.</td></tr>
+      <tr><td><strong>Ultrasónico</strong></td><td>Tiempo de vuelo de un pulso acústico reflejado en la superficie.</td><td>Sin contacto, continuo</td><td>Económico; no toca el producto.</td><td>Espuma, vapores, temperatura del aire, zona muerta.</td></tr>
+      <tr><td><strong>Radar</strong></td><td>Tiempo de vuelo o barrido de frecuencia (FMCW) de microondas; en onda guiada viaja por una varilla.</td><td>Sin contacto o guiado</td><td>Inmune a temperatura, presión y vapores; muy exacto.</td><td>Costo; productos de εr muy bajo.</td></tr>
+      <tr><td><strong>Magnetostrictivo</strong></td><td>Un flotador con imán genera un pulso torsional en un alambre guía.</td><td>Continuo</td><td>Exactitud de ±0,5 mm; mide interfases.</td><td>Contacto; longitud limitada.</td></tr>
+      <tr><td><strong>Interruptores de punto</strong></td><td>Horquilla vibratoria, electrodos conductivos, flotador con interruptor.</td><td>De punto</td><td>Confiables para alarmas LSH y LSL.</td><td>No dan el valor continuo.</td></tr>
+    </tbody>
+  </table></div>
+  <h2>Nivel, volumen y masa</h2>
+  <p>El controlador mide nivel, pero el inventario se paga en volumen o en masa. En un tanque vertical la relación es lineal; en uno horizontal o esférico no lo es, y el sistema de control usa una <em class="term">tabla de aforo</em> para linealizarla.</p>
+  <div class="formula">\[ V_{\text{vert}} = \frac{\pi D^2}{4}\,h \qquad V_{\text{horiz}} = L\left[R^2\arccos\!\frac{R-h}{R} - (R-h)\sqrt{2Rh-h^2}\right] \qquad V_{\text{esf}} = \frac{\pi h^2 (3R - h)}{3} \qquad m = \rho V \]</div>
+  <div class="sim">
+    <div class="card ctrls">
+      <div class="ctrl"><label>Geometría del tanque</label><div class="seg" id="vg-g"><button data-v="v" class="on">Vertical</button><button data-v="h">Horizontal</button><button data-v="e">Esfera</button></div></div>
+      <div class="ctrl"><label for="vg-D">Diámetro D <output id="vg-Do"></output></label><input type="range" id="vg-D" min="0.5" max="6" step="0.1" value="2.4"></div>
+      <div class="ctrl"><label for="vg-L">Longitud o altura del cilindro L <output id="vg-Lo"></output></label><input type="range" id="vg-L" min="1" max="12" step="0.1" value="6"></div>
+      <div class="ctrl"><label for="vg-h">Nivel <output id="vg-ho"></output></label><input type="range" id="vg-h" min="0" max="100" step="0.5" value="25"></div>
+      <div class="ctrl"><label for="vg-f">Producto</label><select id="vg-f"></select></div>
+      <div class="kpis" id="vg-k"></div>
+    </div>
+    <div id="vg-plot"></div>
+  </div>
+  <div class="callout"><b>Pregunta</b><p>En el tanque horizontal, ¿qué porcentaje del volumen hay cuando el nivel está al 25 % del diámetro? ¿Por qué un error de 1 cm en el nivel cuesta más volumen a media altura que cerca del fondo?</p></div>
+</section>
+
+<!-- ================= HIDROSTÁTICO ================= -->
+<section class="page" id="hidro" data-sec="II · Hidrostático" data-title="Medición hidrostática" hidden>
+  <p class="eyebrow">Sección II · Medición hidrostática</p>
+  <h1>Nivel a partir de la presión</h1>
+  <p class="lead">Un transmisor de presión diferencial conectado al fondo del tanque mide el peso de la columna de líquido por unidad de área. Si la densidad es conocida y constante, la presión es proporcional al nivel.</p>
+  <h2>Cuatro montajes típicos</h2>
+  <div class="grid2">
+    <div class="card"><h3 style="margin-top:0">Tanque abierto</h3><p>El lado de alta (H) va al fondo y el de baja (L) queda abierto a la atmósfera. Si el transmisor está una distancia \(d\) por debajo de la toma, el tubo de conexión suma una columna que hay que restar: es la <em class="term">supresión de cero</em>.</p><div class="formula">\[ \Delta P = \rho g\,(h + d) \]</div></div>
+    <div class="card"><h3 style="margin-top:0">Tanque cerrado con pierna seca</h3><p>La presión del gas \(P_0\) actúa sobre ambos lados y se cancela. La línea de baja va al techo del tanque y debe permanecer seca: no puede haber condensado.</p><div class="formula">\[ \Delta P = (P_0 + \rho g h) - P_0 = \rho g h \]</div></div>
+    <div class="card"><h3 style="margin-top:0">Tanque cerrado con pierna húmeda</h3><p>Si el gas condensa (vapor), la línea de baja se llena a propósito con líquido de altura \(H_w\). La presión diferencial queda negativa con el tanque vacío: es una <em class="term">elevación de cero</em>.</p><div class="formula">\[ \Delta P = \rho g h - \rho_w g H_w \]</div></div>
+    <div class="card"><h3 style="margin-top:0">Burbujeo</h3><p>Un tubo llega casi hasta el fondo y por él se inyecta un pequeño caudal de aire. Cuando burbujea, la presión del aire en el tubo iguala la de la columna. El transmisor solo ve aire limpio.</p><div class="formula">\[ P_{\text{aire}} = \rho g h \]</div></div>
+  </div>
+  <h2>Calibración del transmisor</h2>
+  <p>El rango del transmisor se fija con los valores de presión diferencial que corresponden al nivel mínimo (LRV) y máximo (URV). La corriente se calcula con la ecuación del lazo:</p>
+  <div class="formula">\[ \mathrm{LRV} = \Delta P(h = 0) \qquad \mathrm{URV} = \Delta P(h = H) \qquad I = 4 + 16\,\frac{\Delta P - \mathrm{LRV}}{\mathrm{URV} - \mathrm{LRV}} \]</div>
+  <h2>El efecto de la densidad</h2>
+  <p>El transmisor no mide nivel: mide presión. Si se calibró para una densidad \(\rho_c\) y el producto cambia a \(\rho\), el nivel indicado se equivoca en la misma proporción:</p>
+  <div class="formula">\[ h_{\text{ind}} = h\,\frac{\rho}{\rho_c} \qquad\qquad e_{\%} = \left(\frac{\rho}{\rho_c} - 1\right)\times 100 \]<small>Un tanque calibrado para agua que recibe salmuera de 1150 kg/m³ indica un nivel 15 % mayor que el real. La temperatura también cambia la densidad: el agua pasa de 998 kg/m³ a 20 °C a 983 kg/m³ a 60 °C.</small></div>
+  <h2>Densidades de referencia a 20 °C</h2>
+  <div class="tbl"><table><thead><tr><th>Producto</th><th class="num">ρ (kg/m³)</th><th class="num">kPa por metro (g = 9,7778)</th></tr></thead><tbody id="h-dens"></tbody></table></div>
+</section>
+
+<!-- ================= SIM DP ================= -->
+<section class="page" id="simdp" data-sec="II · Hidrostático" data-title="Simulador de transmisor DP" hidden>
+  <p class="eyebrow">Sección II · Simulador</p>
+  <h1>Transmisor de presión diferencial en el tanque</h1>
+  <p class="lead">Configura el montaje, calibra el transmisor para un producto y luego cambia el producto real del tanque. El simulador calcula la presión en cada toma, el rango de calibración, la corriente del lazo y el error del nivel indicado.</p>
+  <div class="sim">
+    <div class="card ctrls">
+      <div class="ctrl"><label>Montaje</label><div class="seg" id="dp-m"><button data-v="abierto" class="on">Abierto</button><button data-v="seca">Pierna seca</button><button data-v="humeda">Pierna húmeda</button></div></div>
+      <div class="ctrl"><label for="dp-fc">Producto de calibración</label><select id="dp-fc"></select></div>
+      <div class="ctrl"><label for="dp-f">Producto real en el tanque</label><select id="dp-f"></select></div>
+      <div class="ctrl"><label for="dp-H">Rango de nivel H <output id="dp-Ho"></output></label><input type="range" id="dp-H" min="0.5" max="8" step="0.1" value="3"></div>
+      <div class="ctrl"><label for="dp-h">Nivel real <output id="dp-ho"></output></label><input type="range" id="dp-h" min="0" max="100" step="0.5" value="60"></div>
+      <div class="ctrl"><label for="dp-d">Transmisor bajo la toma, d <output id="dp-do"></output></label><input type="range" id="dp-d" min="0" max="2" step="0.05" value="0.5"></div>
+      <div class="ctrl"><label for="dp-p0">Presión del gas P₀ <output id="dp-p0o"></output></label><input type="range" id="dp-p0" min="0" max="300" step="5" value="120"></div>
+      <div class="ctrl"><label for="dp-hw">Altura de la pierna húmeda Hw <output id="dp-hwo"></output></label><input type="range" id="dp-hw" min="0.5" max="10" step="0.1" value="4"></div>
+      <label class="check"><input type="checkbox" id="dp-brk"> Simular cable roto</label>
+    </div>
+    <div class="stack" style="min-width:0">
+      <div class="kpis" id="dp-k"></div>
+      <div class="card tankbox"><div id="dp-svg"></div></div>
+    </div>
+  </div>
+  <div id="dp-plot"></div>
+  <div class="callout"><b>Pregunta</b><p>Calibra para agua y llena el tanque con salmuera. Luego pasa al montaje con pierna húmeda. ¿Por qué el LRV es negativo y qué ocurre con la medición si la pierna húmeda se evapora parcialmente?</p></div>
+</section>
+
+<!-- ================= ULTRASÓNICO ================= -->
+<section class="page" id="ultra" data-sec="III · Tiempo de vuelo" data-title="Ultrasonido y radar" hidden>
+  <p class="eyebrow">Sección III · Tiempo de vuelo</p>
+  <h1>Medición sin contacto: ultrasonido y radar</h1>
+  <p class="lead">Un transductor montado en el techo del tanque emite un pulso y mide el tiempo que tarda el eco en volver desde la superficie. Conocida la velocidad de propagación, el tiempo se convierte en distancia, y la distancia en nivel.</p>
+  <div class="formula">\[ d = \frac{c\,t}{2} \qquad\qquad h = H_s - d \qquad\qquad c(T) = 331{,}3\sqrt{1 + \frac{T}{273{,}15}} \approx 331{,}3 + 0{,}606\,T \ \ \mathrm{m/s} \]<small>\(t\): tiempo de ida y vuelta · \(H_s\): distancia del sensor al fondo · \(T\): temperatura del aire en °C. A 20 °C, \(c \approx 343\) m/s. El coeficiente 0,606 es la pendiente a 0 °C; entre 20 y 50 °C la pendiente real se acerca a 0,58 m/s por °C.</small></div>
+  <h2>Lo que afecta al ultrasonido</h2>
+  <div class="grid3">
+    <div class="card"><h3 style="margin-top:0">Temperatura del aire</h3><p>La velocidad del sonido cambia 0,18 % por cada grado. Un sensor sin compensación que trabaja a 40 °C con la velocidad de 20 °C mide la distancia 3,5 % corta. Por eso los transmisores industriales traen un sensor de temperatura integrado.</p></div>
+    <div class="card"><h3 style="margin-top:0">Zona muerta</h3><p>Tras emitir, la membrana sigue vibrando y no puede escuchar. Las superficies a menos de esa distancia (25 cm en un JSN-SR04T) no se detectan; el nivel máximo debe quedar por debajo de ella.</p></div>
+    <div class="card"><h3 style="margin-top:0">Espuma, vapores y turbulencia</h3><p>La espuma absorbe el pulso, los vapores cambian la velocidad del sonido y la superficie agitada dispersa el eco. Los obstáculos internos (agitadores, escaleras) producen ecos falsos.</p></div>
+  </div>
+  <h2>Del Arduino a la planta</h2>
+  <p>Con un HC-SR04, la función <code>pulseIn()</code> entrega el ancho del pulso de eco en microsegundos. La conocida fórmula \(d\,[\text{cm}] = t\,[\mu\text{s}]/58\) supone \(c \approx 345\) m/s, es decir, unos 23 °C. Un transmisor industrial hace lo mismo pero compensa la temperatura, filtra los ecos falsos y entrega 4–20 mA o HART.</p>
+  <h2>Radar</h2>
+  <p>El radar usa microondas (26 u 80 GHz) que viajan a la velocidad de la luz, prácticamente igual en aire, vapor o vacío. Por eso no le afectan la temperatura ni la presión del gas. En los radares FMCW la frecuencia emitida crece en rampa y la diferencia entre la emitida y la recibida es proporcional a la distancia:</p>
+  <div class="formula">\[ \Delta f = \frac{2\,S\,d}{c_0} \qquad\qquad S = \frac{\text{ancho de barrido}}{\text{duración de la rampa}} \]<small>En el radar de onda guiada (TDR), el pulso viaja por una varilla o cable sumergido y se refleja donde cambia la permitividad: en la superficie y en la interfase entre dos líquidos.</small></div>
+</section>
+
+<!-- ================= SIM US ================= -->
+<section class="page" id="simus" data-sec="III · Tiempo de vuelo" data-title="Simulador ultrasónico" hidden>
+  <p class="eyebrow">Sección III · Simulador</p>
+  <h1>Sensor ultrasónico y temperatura del aire</h1>
+  <p class="lead">El sensor está en el techo del tanque. Cambia el nivel y la temperatura del aire, y compara un firmware que usa una velocidad fija de 343 m/s con uno que compensa la temperatura.</p>
+  <div class="sim">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="us-H">Sensor sobre el fondo Hₛ <output id="us-Ho"></output></label><input type="range" id="us-H" min="1" max="8" step="0.1" value="4"></div>
+      <div class="ctrl"><label for="us-h">Nivel real <output id="us-ho"></output></label><input type="range" id="us-h" min="0" max="100" step="0.5" value="50"></div>
+      <div class="ctrl"><label for="us-T">Temperatura del aire <output id="us-To"></output></label><input type="range" id="us-T" min="-10" max="70" step="1" value="40"></div>
+      <div class="ctrl"><label for="us-z">Zona muerta <output id="us-zo"></output></label><input type="range" id="us-z" min="0.1" max="0.6" step="0.05" value="0.25"></div>
+      <div class="ctrl"><label>Firmware</label><div class="seg" id="us-fw"><button data-v="fija" class="on">c fija 343 m/s</button><button data-v="comp">Compensado</button></div></div>
+    </div>
+    <div class="stack" style="min-width:0">
+      <div class="kpis" id="us-k"></div>
+      <div class="card tankbox"><div id="us-svg"></div></div>
+    </div>
+  </div>
+  <h2>Error del nivel frente a la temperatura</h2>
+  <p>Las curvas muestran el error del nivel indicado para el nivel actual cuando la temperatura del aire varía. El firmware compensado usa la aproximación lineal de c(T): deja un error de pocos milímetros, que crece lejos de 0 °C porque la relación real es una raíz cuadrada.</p>
+  <div id="us-plot"></div>
+  <div class="callout"><b>Pregunta</b><p>¿Por qué el error del firmware sin compensar es mayor cuando el tanque está casi vacío? Calcula a qué temperatura el error es cero y explica por qué.</p></div>
+</section>
+
+<!-- ================= CAPACITIVO ================= -->
+<section class="page" id="capac" data-sec="IV · Capacitivo" data-title="Medición capacitiva" hidden>
+  <p class="eyebrow">Sección IV · Medición capacitiva</p>
+  <h1>La sonda capacitiva</h1>
+  <p class="lead">Una varilla metálica dentro de un tubo (o dentro de un tanque metálico) forma un condensador. La parte sumergida tiene como dieléctrico el producto, con permitividad relativa \(\varepsilon_r\); la parte en aire tiene \(\varepsilon_r \approx 1\). La capacitancia total crece linealmente con el nivel.</p>
+  <div class="formula">\[ K = \frac{2\pi\varepsilon_0}{\ln(D/d)} \qquad\qquad C(h) = C_p + K\left[\varepsilon_r\,h + (L_p - h)\right] = \underbrace{C_p + K L_p}_{C_{\text{vacío}}} + K(\varepsilon_r - 1)\,h \]<small>\(D\): diámetro interior del tubo · \(d\): diámetro de la varilla · \(L_p\): longitud de la sonda · \(C_p\): capacitancia parásita del cable y la conexión · \(\varepsilon_0 = 8{,}854\) pF/m.</small></div>
+  <h2>Productos conductores y no conductores</h2>
+  <div class="grid2">
+    <div class="card"><h3 style="margin-top:0">No conductores</h3><p>Aceites, combustibles, solventes, granos. El producto es el dieléctrico y la sensibilidad depende de \(\varepsilon_r - 1\): con ACPM (\(\varepsilon_r \approx 2{,}1\)) la señal es pequeña y la calibración debe hacerse con el producto real.</p></div>
+    <div class="card"><h3 style="margin-top:0">Conductores</h3><p>Agua, salmuera, ácidos. La varilla se recubre con un aislante (PTFE) y el líquido conductor se comporta como la otra placa. La capacitancia depende del espesor del aislante y casi no de la permitividad del producto.</p></div>
+  </div>
+  <h2>Cómo se mide la capacitancia</h2>
+  <p>Las capacitancias de una sonda son de decenas a cientos de picofaradios. Los transmisores usan puentes de radiofrecuencia o convertidores de capacitancia a digital. En el laboratorio basta un temporizador 555 en modo astable, cuya frecuencia es inversamente proporcional a la capacitancia:</p>
+  <div class="formula">\[ f = \frac{1{,}44}{(R_1 + 2R_2)\,C} \qquad\Longrightarrow\qquad C = \frac{1{,}44}{(R_1 + 2R_2)\,f} \]<small>El microcontrolador cuenta los pulsos en una ventana de tiempo fija (por ejemplo, con el contador de pulsos del ESP32) y calcula \(C\) y luego el nivel.</small></div>
+  <div class="callout warn"><b>Atención</b><p>Las adherencias de producto viscoso sobre la sonda se miden como nivel. En los transmisores industriales se usa una guarda activa que compensa la capa adherida. La capacitancia del cable también cambia con la temperatura: el cable entre sonda y electrónica debe ser corto y fijo.</p></div>
+</section>
+
+<!-- ================= SIM CAP ================= -->
+<section class="page" id="simcap" data-sec="IV · Capacitivo" data-title="Simulador de sonda capacitiva" hidden>
+  <p class="eyebrow">Sección IV · Simulador</p>
+  <h1>Sonda capacitiva con oscilador 555</h1>
+  <p class="lead">Cambia la geometría de la sonda y el producto, y observa la capacitancia, la frecuencia del oscilador y la sensibilidad. La capacitancia es lineal con el nivel; la frecuencia no.</p>
+  <div class="sim">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="cp-f">Producto</label><select id="cp-f"></select></div>
+      <div class="ctrl"><label for="cp-h">Nivel <output id="cp-ho"></output></label><input type="range" id="cp-h" min="0" max="100" step="0.5" value="50"></div>
+      <div class="ctrl"><label for="cp-L">Longitud de la sonda Lₚ <output id="cp-Lo"></output></label><input type="range" id="cp-L" min="0.3" max="3" step="0.05" value="1.2"></div>
+      <div class="ctrl"><label for="cp-D">Diámetro del tubo D <output id="cp-Do"></output></label><input type="range" id="cp-D" min="10" max="60" step="1" value="20"></div>
+      <div class="ctrl"><label for="cp-d">Diámetro de la varilla d <output id="cp-do"></output></label><input type="range" id="cp-d" min="2" max="16" step="0.5" value="6"></div>
+      <div class="ctrl"><label for="cp-p">Capacitancia parásita Cₚ <output id="cp-po"></output></label><input type="range" id="cp-p" min="0" max="80" step="1" value="30"></div>
+      <div class="ctrl"><label for="cp-r">R₁ + 2R₂ del 555 <output id="cp-ro"></output></label><input type="range" id="cp-r" min="50" max="500" step="10" value="210"></div>
+    </div>
+    <div class="stack" style="min-width:0">
+      <div class="kpis" id="cp-k"></div>
+      <div class="card tankbox"><div id="cp-svg"></div></div>
+    </div>
+  </div>
+  <div class="grid2"><div id="cp-plot1"></div><div id="cp-plot2"></div></div>
+  <div class="callout"><b>Pregunta</b><p>Compara la sensibilidad en pF/m con ACPM y con alcohol isopropílico. ¿Qué cambiarías en la sonda para duplicar la sensibilidad con ACPM? ¿Por qué el firmware debe calcular primero \(C\) y no convertir la frecuencia a nivel con una recta?</p></div>
+</section>
+
+<!-- ================= CONTROL ================= -->
+<section class="page" id="control" data-sec="V · Lazo de control" data-title="Control de nivel y acción de falla" hidden>
+  <p class="eyebrow">Sección V · Lazo de control</p>
+  <h1>Control de nivel, alarmas y acción de falla</h1>
+  <p class="lead">El tanque es un integrador: el nivel sube mientras el caudal de entrada supere al de salida. El controlador LIC-301 ajusta la válvula de entrada LV-301 para mantener el nivel en la consigna, y las alarmas LSH y LSL protegen contra el rebose y el vaciado.</p>
+  <div class="formula">\[ A\,\frac{\mathrm{d}h}{\mathrm{d}t} = Q_{\text{ent}} - Q_{\text{sal}} \qquad Q_{\text{ent}} = Q_{\max}\,\frac{u}{100} \qquad u = u_0 + K_c\,(SP - PV) \]<small>\(A\): área del tanque · \(u\): salida del controlador en % · \(K_c\): ganancia proporcional · \(SP\), \(PV\): consigna y nivel medido en % del rango. Si el nivel sube, la salida baja: es un controlador de acción inversa.</small></div>
+  <h2>¿Falla-cierra o falla-abre?</h2>
+  <p>Si se pierde el aire de instrumentos o la señal, el resorte del actuador lleva la válvula a su posición segura. Para una válvula de <strong>entrada</strong>, la posición segura casi siempre es <span class="tag">FC</span> (falla cierra): evita el rebose. Para una válvula de <strong>salida</strong> que alimenta una bomba, puede ser <span class="tag">FO</span> o <span class="tag">FC</span> según qué sea más peligroso, vaciar el tanque o dejar sin alimentación el proceso siguiente. La decisión se toma con un análisis de riesgo y se indica en el P&amp;ID.</p>
+  <div class="sim">
+    <div class="card ctrls">
+      <div class="ctrl"><label>Modo del controlador</label><div class="seg" id="ct-m"><button data-v="man">Manual</button><button data-v="onoff">Todo o nada</button><button data-v="p" class="on">Proporcional</button></div></div>
+      <div class="ctrl"><label for="ct-sp">Consigna SP <output id="ct-spo"></output></label><input type="range" id="ct-sp" min="10" max="90" step="1" value="60"></div>
+      <div class="ctrl"><label for="ct-kc">Ganancia Kc <output id="ct-kco"></output></label><input type="range" id="ct-kc" min="0.5" max="10" step="0.5" value="2"></div>
+      <div class="ctrl"><label for="ct-u">Salida manual <output id="ct-uo"></output></label><input type="range" id="ct-u" min="0" max="100" step="1" value="40"></div>
+      <div class="ctrl"><label for="ct-q">Demanda de salida <output id="ct-qo"></output></label><input type="range" id="ct-q" min="0" max="9" step="0.1" value="4"></div>
+      <div class="ctrl"><label>Acción de falla de LV-301</label><div class="seg" id="ct-fa"><button data-v="FC" class="on">FC · falla cierra</button><button data-v="FO">FO · falla abre</button></div></div>
+      <label class="check"><input type="checkbox" id="ct-fail"> Pérdida de aire en LV-301</label>
+      <button class="btn sm" id="ct-reset">Reiniciar simulación</button>
+    </div>
+    <div class="stack" style="min-width:0">
+      <div class="kpis" id="ct-k"></div>
+      <div class="card tankbox"><div id="ct-svg"></div></div>
+    </div>
+  </div>
+  <div id="ct-plot1"></div>
+  <div id="ct-plot2" style="margin-top:14px"></div>
+  <div class="callout"><b>Para el proyecto</b><p>Identifica en tu proceso el lazo de nivel más crítico. Define la consigna, las alarmas LSH y LSL, y justifica la acción de falla de la válvula con lo que observes aquí. Esa decisión debe aparecer en tu P&amp;ID.</p></div>
+</section>
+
+<!-- ================= COMPARA ================= -->
+<section class="page" id="compara" data-sec="V · Lazo de control" data-title="Comparación y selección" hidden>
+  <p class="eyebrow">Sección V · Criterios de selección</p>
+  <h1>¿Qué método elegir?</h1>
+  <p class="lead">La selección depende del producto (densidad, permitividad, espuma, viscosidad, corrosividad), del tanque (abierto, presurizado, con vapor), de la exactitud requerida y del presupuesto.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Criterio</th><th>Presión diferencial</th><th>Ultrasónico</th><th>Radar</th><th>Capacitivo</th></tr></thead>
+    <tbody>
+      <tr><td>Contacto con el producto</td><td>Sí (diafragma)</td><td>No</td><td>No (o guiado)</td><td>Sí</td></tr>
+      <tr><td>Depende de la densidad</td><td>Sí</td><td>No</td><td>No</td><td>No</td></tr>
+      <tr><td>Depende de la temperatura del gas</td><td>No</td><td>Sí</td><td>No</td><td>No</td></tr>
+      <tr><td>Depende de εr</td><td>No</td><td>No</td><td>Poco (εr &gt; 1,8)</td><td>Sí</td></tr>
+      <tr><td>Tanque presurizado o con vapor</td><td>Sí, con pierna</td><td>No recomendado</td><td>Sí</td><td>Sí</td></tr>
+      <tr><td>Espuma y turbulencia</td><td>No le afectan</td><td>Muy sensible</td><td>Poco sensible</td><td>Poco sensible</td></tr>
+      <tr><td>Exactitud típica</td><td>0,1 a 0,5 % del alcance</td><td>0,25 a 1 % del alcance</td><td>±1 a ±5 mm</td><td>0,5 a 2 % del alcance</td></tr>
+      <tr><td>Costo relativo</td><td>Medio</td><td>Bajo</td><td>Alto</td><td>Bajo a medio</td></tr>
+    </tbody>
+  </table></div>
+  <h2>Casos de selección</h2>
+  <p>Elige el método que recomendarías y compara tu criterio con la justificación.</p>
+  <div class="scen" id="scen"></div>
+</section>
+
+<!-- ================= LAB ID ================= -->
+<section class="page" id="labid" data-sec="VI · Laboratorio virtual" data-title="Ingreso al laboratorio" hidden>
+  <p class="eyebrow">Sección VI · Laboratorio virtual</p>
+  <h1>Ingreso al laboratorio</h1>
+  <p class="lead">Tu código estudiantil asigna un banco de medición. Cada banco tiene un producto desconocido con su propia densidad, un transmisor montado a una altura propia, un sensor ultrasónico con su retardo electrónico y una sonda capacitiva con su capacitancia parásita. Por eso tus resultados serán únicos.</p>
+  <div class="grid2">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="id-name">Nombre completo</label><input type="text" id="id-name" placeholder="Ej.: María Fernanda Ríos Gómez" autocomplete="name"></div>
+      <div class="ctrl"><label for="id-code">Código estudiantil</label><input type="text" id="id-code" placeholder="Ej.: 202458731" inputmode="numeric"></div>
+      <div class="ctrl"><label for="id-mates">Compañeros de grupo (opcional)</label><input type="text" id="id-mates" placeholder="Nombres separados por comas"></div>
+      <div class="grid2" style="gap:10px">
+        <div class="ctrl"><label for="id-group">Grupo</label><input type="text" id="id-group" placeholder="Ej.: 50"></div>
+        <div class="ctrl"><label for="id-date">Fecha</label><input type="text" id="id-date"></div>
+      </div>
+      <button class="btn gold" id="id-go">Asignar banco de medición</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Tu banco</h3>
+      <div id="id-bench" class="empty">Escribe tu código y pulsa «Asignar banco de medición».</div>
+      <div class="callout warn" style="margin-bottom:0"><b>Importante</b><p>Si cambias el código después de tomar datos, el banco cambia y debes repetir las lecturas. Los datos se guardan en este navegador; si cambias de equipo, empieza de nuevo.</p></div>
+    </div>
+  </div>
+  <h2>Cómo funciona el laboratorio</h2>
+  <ol class="steps">
+    <li>Fija la condición de la prueba con los controles deslizantes: nivel del tanque y, en la práctica 2, temperatura del aire. Los instrumentos tardan un momento en estabilizarse.</li>
+    <li>Pulsa <strong>Registrar lectura</strong> para guardar en la tabla lo que muestran los instrumentos en ese instante.</li>
+    <li>Toma las lecturas mínimas que pide cada práctica, repartidas en todo el rango.</li>
+    <li>Pulsa <strong>Analizar datos</strong>. Se ajustan los modelos por mínimos cuadrados y se dibujan los resultados.</li>
+    <li>Escribe tu análisis en el campo de cada práctica. Todo se recopila en el informe.</li>
+  </ol>
+</section>
+
+<!-- ================= PRÁCTICA 1 ================= -->
+<section class="page" id="lab1" data-sec="VI · Laboratorio virtual" data-title="Práctica 1 · Nivel hidrostático" hidden>
+  <p class="eyebrow">Práctica 1 · Medición hidrostática</p>
+  <h1>Densidad del producto y supresión de cero</h1>
+  <p class="lead">El tanque de tu banco contiene un producto desconocido. El transmisor LT-101 está instalado a una distancia \(d\) bajo la toma del fondo, que no conoces, y fue calibrado para agua de 0 a 1,50 m sin supresión de cero (0 a 14,637 kPa). Un manómetro digital diferencial está conectado en paralelo.</p>
+  <div class="formula">\[ \Delta P = \rho\,g\,(h + d) \qquad g = 9{,}7778\ \mathrm{m/s^2} \qquad I = 4 + 16\,\frac{\Delta P}{14{,}637\ \mathrm{kPa}} \qquad h_{\text{LIC}} = \frac{I - 4}{16}\times 1{,}50\ \mathrm{m} \]</div>
+  <h3>Procedimiento</h3>
+  <ol class="steps">
+    <li>Llena el tanque por etapas entre 0 y 1,50 m y registra al menos <strong>8 lecturas</strong>: nivel en la regla, presión diferencial y corriente del transmisor.</li>
+    <li>Analiza: con la recta \(\Delta P = m\,h + b\) se obtienen \(\rho = m/g\) y \(d = b/(\rho g)\).</li>
+    <li>Compara el nivel que muestra el controlador con el de la regla y calcula el nuevo LRV y URV del transmisor para tu producto.</li>
+  </ol>
+  <div class="bench">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="l1-sp">Nivel del tanque <output id="l1-spo"></output></label><input type="range" id="l1-sp" min="0" max="1.5" step="0.01" value="0.10"></div>
+      <div class="row"><button class="btn gold" id="l1-rec">Registrar lectura</button><button class="btn" id="l1-an">Analizar datos</button><button class="btn sm" id="l1-clr">Borrar tabla</button></div>
+      <div class="lcd">
+        <span class="st" id="l1-st">Estabilizando…</span>
+        <div><span>Regla</span><b id="l1-d1">—</b></div>
+        <div><span>ΔP digital</span><b id="l1-d2">—</b></div>
+        <div><span>LT-101</span><b id="l1-d3">—</b></div>
+        <div><span>LIC-101</span><b id="l1-d4">—</b></div>
+      </div>
+    </div>
+    <div class="card tankbox"><div id="l1-svg"></div></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th class="num">#</th><th class="num">h regla (m)</th><th class="num">ΔP (kPa)</th><th class="num">I (mA)</th><th class="num">h LIC (m)</th><th></th></tr></thead><tbody id="l1-tb"></tbody></table></div>
+  <div id="l1-res" class="results"></div>
+  <h3>Preguntas orientadoras</h3>
+  <ol class="qs">
+    <li>¿Qué densidad obtuviste? Compárala con la tabla de la sección II e identifica el producto.</li>
+    <li>¿A qué distancia bajo la toma está el transmisor? ¿Qué lectura da el controlador con el tanque vacío y por qué? ¿Se satura el transmisor (20,5 mA) antes de llenar el tanque? Explica por qué.</li>
+    <li>¿Cuál es el error máximo del nivel indicado por el LIC, en metros y en % del alcance? Separa la parte que se debe a la densidad y la que se debe a la supresión de cero.</li>
+    <li>Escribe el LRV y el URV correctos para tu producto y comprueba que con ellos el error desaparece.</li>
+  </ol>
+  <div class="ctrl"><label for="l1-txt">Análisis de resultados de la práctica 1</label><textarea id="l1-txt" placeholder="Interpreta tus resultados respondiendo las preguntas orientadoras."></textarea></div>
+</section>
+
+<!-- ================= PRÁCTICA 2 ================= -->
+<section class="page" id="lab2" data-sec="VI · Laboratorio virtual" data-title="Práctica 2 · Sensor ultrasónico" hidden>
+  <p class="eyebrow">Práctica 2 · Tiempo de vuelo</p>
+  <h1>Ultrasonido y compensación de temperatura</h1>
+  <p class="lead">El sensor ultrasónico está a \(H_s = 1{,}600\) m del fondo. Un calefactor permite cambiar la temperatura del aire dentro del tanque, que se mide con un sensor de temperatura. El firmware de fábrica usa \(c = 343\) m/s fija. La electrónica añade un retardo \(t_0\) desconocido.</p>
+  <div class="formula">\[ t = \frac{2\,(H_s - h)}{c(T)} + t_0 \qquad 2\,(H_s - h) = (c_0 + k\,T)(t - t_0) \]<small>Al desarrollar el producto se obtiene un modelo lineal en \(t\), \(T\,t\), \(1\) y \(T\), que se ajusta por mínimos cuadrados para hallar \(c_0\), \(k\) y \(t_0\).</small></div>
+  <h3>Procedimiento</h3>
+  <ol class="steps">
+    <li>Con el aire a temperatura ambiente, registra al menos 4 lecturas a niveles distintos entre 0,10 y 1,30 m.</li>
+    <li>Sube la temperatura del aire y repite a otros niveles. Necesitas al menos <strong>8 lecturas</strong> y una diferencia de temperatura de 15 °C o más entre la menor y la mayor.</li>
+    <li>Analiza: compara \(c_0\) y \(k\) con la teoría (331,3 m/s; pendiente entre 0,57 y 0,61 m/s/°C) y el error del firmware de fábrica con el del firmware compensado con tus propios coeficientes.</li>
+  </ol>
+  <div class="bench">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="l2-sp">Nivel del tanque <output id="l2-spo"></output></label><input type="range" id="l2-sp" min="0.10" max="1.30" step="0.01" value="0.30"></div>
+      <div class="ctrl"><label for="l2-sp2">Calefactor: temperatura del aire <output id="l2-sp2o"></output></label><input type="range" id="l2-sp2" min="15" max="60" step="1" value="24"></div>
+      <div class="row"><button class="btn gold" id="l2-rec">Registrar lectura</button><button class="btn" id="l2-an">Analizar datos</button><button class="btn sm" id="l2-clr">Borrar tabla</button></div>
+      <div class="lcd">
+        <span class="st" id="l2-st">Estabilizando…</span>
+        <div><span>Regla</span><b id="l2-d1">—</b></div>
+        <div><span>T aire</span><b id="l2-d2">—</b></div>
+        <div><span>Eco</span><b id="l2-d3">—</b></div>
+        <div><span>Nivel firmware</span><b id="l2-d4">—</b></div>
+      </div>
+    </div>
+    <div class="card tankbox"><div id="l2-svg"></div></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th class="num">#</th><th class="num">h regla (m)</th><th class="num">T aire (°C)</th><th class="num">t eco (µs)</th><th class="num">h firmware (m)</th><th></th></tr></thead><tbody id="l2-tb"></tbody></table></div>
+  <div id="l2-res" class="results"></div>
+  <h3>Preguntas orientadoras</h3>
+  <ol class="qs">
+    <li>¿Qué valores de \(c_0\), \(k\) y \(t_0\) obtuviste? Compáralos con la teoría y explica el origen físico del retardo \(t_0\).</li>
+    <li>¿Cuál es el error RMS del firmware de fábrica y el del firmware compensado? ¿Cuál de los dos errores domina: el de temperatura o el del retardo?</li>
+    <li>¿Por qué el error del firmware de fábrica crece con la temperatura y con la distancia al producto?</li>
+    <li>Escribe la línea de código que calcularía el nivel compensado a partir de <code>t_us</code> y <code>T_aire</code> en tu Arduino.</li>
+  </ol>
+  <div class="ctrl"><label for="l2-txt">Análisis de resultados de la práctica 2</label><textarea id="l2-txt" placeholder="Interpreta tus resultados respondiendo las preguntas orientadoras."></textarea></div>
+</section>
+
+<!-- ================= PRÁCTICA 3 ================= -->
+<section class="page" id="lab3" data-sec="VI · Laboratorio virtual" data-title="Práctica 3 · Sonda capacitiva" hidden>
+  <p class="eyebrow">Práctica 3 · Medición capacitiva</p>
+  <h1>Caracterización de una sonda capacitiva</h1>
+  <p class="lead">La sonda coaxial de tu banco (tubo de 20 mm, varilla de 6 mm, \(L_p = 1{,}20\) m, \(K = 46{,}21\) pF/m) está sumergida en un producto no conductor desconocido. La sonda forma parte de un 555 astable con \(R_1 = 10\) kΩ y \(R_2 = 100\) kΩ, y un frecuencímetro mide la salida.</p>
+  <div class="formula">\[ C = \frac{1{,}44}{(R_1 + 2R_2)\,f} \qquad C(h) = C_{\text{vacío}} + K(\varepsilon_r - 1)\,h \qquad \varepsilon_r = 1 + \frac{m}{K} \qquad C_p = C_{\text{vacío}} - K L_p \]</div>
+  <h3>Procedimiento</h3>
+  <ol class="steps">
+    <li>Llena el tanque por etapas entre 0 y 1,20 m y registra al menos <strong>7 lecturas</strong> de nivel y frecuencia.</li>
+    <li>Analiza: se calcula \(C\) en cada punto y se ajusta la recta \(C = m\,h + C_{\text{vacío}}\).</li>
+    <li>Obtén la permitividad del producto y la capacitancia parásita, y escribe la ecuación que usaría el firmware para pasar de frecuencia a nivel.</li>
+  </ol>
+  <div class="bench">
+    <div class="card ctrls">
+      <div class="ctrl"><label for="l3-sp">Nivel del tanque <output id="l3-spo"></output></label><input type="range" id="l3-sp" min="0" max="1.2" step="0.01" value="0"></div>
+      <div class="row"><button class="btn gold" id="l3-rec">Registrar lectura</button><button class="btn" id="l3-an">Analizar datos</button><button class="btn sm" id="l3-clr">Borrar tabla</button></div>
+      <div class="lcd">
+        <span class="st" id="l3-st">Estabilizando…</span>
+        <div><span>Regla</span><b id="l3-d1">—</b></div>
+        <div><span>Frecuencia</span><b id="l3-d2">—</b></div>
+        <div><span>Período</span><b id="l3-d3">—</b></div>
+      </div>
+    </div>
+    <div class="card tankbox"><div id="l3-svg"></div></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th class="num">#</th><th class="num">h regla (m)</th><th class="num">f (kHz)</th><th class="num">C (pF)</th><th></th></tr></thead><tbody id="l3-tb"></tbody></table></div>
+  <div id="l3-res" class="results"></div>
+  <h3>Preguntas orientadoras</h3>
+  <ol class="qs">
+    <li>¿Qué permitividad relativa obtuviste? Con la tabla del simulador capacitivo, identifica el producto.</li>
+    <li>¿Cuánto vale la capacitancia parásita y qué porcentaje de la capacitancia total representa con el tanque vacío?</li>
+    <li>¿Cuál es la sensibilidad en pF/m y en Hz/m? ¿Por qué la segunda no es constante?</li>
+    <li>Si el 555 tiene resistencias de tolerancia ±1 %, ¿cómo afecta eso a la permitividad calculada y cómo lo evitarías al calibrar?</li>
+  </ol>
+  <div class="ctrl"><label for="l3-txt">Análisis de resultados de la práctica 3</label><textarea id="l3-txt" placeholder="Interpreta tus resultados respondiendo las preguntas orientadoras."></textarea></div>
+</section>
+
+<!-- ================= EJERCICIOS ================= -->
+<section class="page" id="ejer" data-sec="VII · Ejercicios" data-title="Ejercicios con verificación" hidden>
+  <p class="eyebrow">Sección VII · Ejercicios</p>
+  <h1>Ejercicios con verificación</h1>
+  <p class="lead">Escribe tu respuesta con la coma o el punto como separador decimal y pulsa «Verificar». Se acepta una pequeña tolerancia por redondeo. El puntaje se incluye en el informe.</p>
+  <div class="row"><span class="pill" id="ex-score">0 / 12 correctos</span><button class="btn sm" id="ex-reset">Reiniciar respuestas</button></div>
+
+  <div class="ex" data-k="e1" data-tol="0.05"><div class="hd"><b>EJERCICIO 1 · Hidrostática</b><span class="fb"></span></div>
+    <p>Un tanque abierto contiene agua (\(\rho = 998\) kg/m³) hasta 3,2 m. Con \(g = 9{,}81\) m/s², ¿cuál es la presión manométrica en el fondo?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">kPa</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(P = 998 \cdot 9{,}81 \cdot 3{,}2 = \) <b class="ans" data-k="e1"></b> kPa.</div></details></div>
+
+  <div class="ex" data-k="e2" data-tol="0.005"><div class="hd"><b>EJERCICIO 2 · Hidrostática</b><span class="fb"></span></div>
+    <p>Un transmisor en el fondo de un tanque abierto de ACPM (\(\rho = 850\) kg/m³) indica 18 kPa. Con \(g = 9{,}81\) m/s², ¿cuál es el nivel?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">m</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(h = \dfrac{18\,000}{850 \cdot 9{,}81} = \) <b class="ans" data-k="e2"></b> m.</div></details></div>
+
+  <div class="ex" data-k="e3" data-tol="0.01"><div class="hd"><b>EJERCICIO 3 · Lazo de 4–20 mA</b><span class="fb"></span></div>
+    <p>Un transmisor de nivel está calibrado de 0 a 5 m. ¿Qué corriente entrega cuando el nivel es 3,1 m?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">mA</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(I = 4 + 16 \cdot \dfrac{3{,}1}{5} = \) <b class="ans" data-k="e3"></b> mA.</div></details></div>
+
+  <div class="ex" data-k="e4" data-tol="0.02"><div class="hd"><b>EJERCICIO 4 · Supresión de cero</b><span class="fb"></span></div>
+    <p>Un transmisor de presión diferencial mide el nivel de un tanque abierto de agua (\(\rho = 998\) kg/m³) de 0 a 4 m. Está instalado 0,8 m por debajo de la toma del fondo. Con \(g = 9{,}81\) m/s², ¿cuál debe ser el URV?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">kPa</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(\mathrm{URV} = 998 \cdot 9{,}81 \cdot (4 + 0{,}8) = \) <b class="ans" data-k="e4"></b> kPa. El LRV es \(998 \cdot 9{,}81 \cdot 0{,}8 = 7{,}83\) kPa.</div></details></div>
+
+  <div class="ex" data-k="e5" data-tol="0.05"><div class="hd"><b>EJERCICIO 5 · Pierna húmeda</b><span class="fb"></span></div>
+    <p>Un tanque cerrado de agua (\(\rho = 998\) kg/m³) tiene una pierna húmeda de 5 m llena de agua en el lado de baja. El transmisor está a la altura de la toma del fondo. Con \(g = 9{,}81\) m/s², ¿cuál es el LRV?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">kPa</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>Con el tanque vacío, \(\Delta P = 0 - 998 \cdot 9{,}81 \cdot 5 = \) <b class="ans" data-k="e5"></b> kPa. Es una elevación de cero.</div></details></div>
+
+  <div class="ex" data-k="e6" data-tol="0.005"><div class="hd"><b>EJERCICIO 6 · Efecto de la densidad</b><span class="fb"></span></div>
+    <p>Un transmisor calibrado para agua (998 kg/m³) mide un tanque que ahora contiene salmuera de 1150 kg/m³. El nivel real es 2,00 m. ¿Qué nivel indica el controlador?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">m</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(h_{\text{ind}} = 2{,}00 \cdot \dfrac{1150}{998} = \) <b class="ans" data-k="e6"></b> m, un 15 % por encima del real.</div></details></div>
+
+  <div class="ex" data-k="e7" data-tol="0.003"><div class="hd"><b>EJERCICIO 7 · Tiempo de vuelo</b><span class="fb"></span></div>
+    <p>Un sensor ultrasónico mide un eco de 8,00 ms con el aire a 25 °C. Con \(c = 331{,}3 + 0{,}606\,T\), ¿a qué distancia está la superficie?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">m</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(c = 331{,}3 + 0{,}606 \cdot 25 = 346{,}45\) m/s; \(d = 346{,}45 \cdot 0{,}008 / 2 = \) <b class="ans" data-k="e7"></b> m.</div></details></div>
+
+  <div class="ex" data-k="e8" data-tol="1"><div class="hd"><b>EJERCICIO 8 · Error de temperatura</b><span class="fb"></span></div>
+    <p>Un sensor ultrasónico está a 3,0 m del fondo y su firmware usa 343 m/s fijos. El aire está a 40 °C y el nivel real es 1,0 m. Con \(c = 331{,}3 + 0{,}606\,T\), ¿cuál es el error del nivel indicado?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">mm</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(c = 355{,}54\) m/s; \(t = 2 \cdot 2{,}0 / 355{,}54 = 11{,}251\) ms; el firmware calcula \(d = 343 \cdot t / 2 = 1{,}9295\) m y \(h = 1{,}0705\) m. Error: <b class="ans" data-k="e8"></b> mm.</div></details></div>
+
+  <div class="ex" data-k="e9" data-tol="0.1"><div class="hd"><b>EJERCICIO 9 · Sonda capacitiva</b><span class="fb"></span></div>
+    <p>Una sonda coaxial tiene un tubo de 25 mm de diámetro interior y una varilla de 8 mm. Con \(\varepsilon_0 = 8{,}854\) pF/m, ¿cuál es su capacitancia por metro en aire?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">pF/m</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(K = \dfrac{2\pi \cdot 8{,}854}{\ln(25/8)} = \) <b class="ans" data-k="e9"></b> pF/m.</div></details></div>
+
+  <div class="ex" data-k="e10" data-tol="0.1"><div class="hd"><b>EJERCICIO 10 · Sonda capacitiva</b><span class="fb"></span></div>
+    <p>Una sonda de 1,5 m con \(K = 46\) pF/m y \(C_p = 30\) pF está en aceite de \(\varepsilon_r = 2{,}2\). ¿Cuál es la capacitancia cuando el nivel es 0,9 m?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">pF</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(C = 30 + 46 \cdot 1{,}5 + 46 \cdot 1{,}2 \cdot 0{,}9 = \) <b class="ans" data-k="e10"></b> pF.</div></details></div>
+
+  <div class="ex" data-k="e11" data-tol="0.05"><div class="hd"><b>EJERCICIO 11 · Oscilador 555</b><span class="fb"></span></div>
+    <p>Un 555 astable tiene \(R_1 = 10\) kΩ y \(R_2 = 100\) kΩ, y la sonda vale 150 pF. ¿Cuál es la frecuencia de salida?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">kHz</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(f = \dfrac{1{,}44}{210\,000 \cdot 150\times10^{-12}} = \) <b class="ans" data-k="e11"></b> kHz.</div></details></div>
+
+  <div class="ex" data-k="e12" data-tol="0.01"><div class="hd"><b>EJERCICIO 12 · Aforo de tanque horizontal</b><span class="fb"></span></div>
+    <p>Un tanque cilíndrico horizontal tiene 2,0 m de diámetro y 5,0 m de longitud. ¿Qué volumen contiene cuando el nivel es 0,50 m?</p>
+    <div class="ans-row"><input type="text" inputmode="decimal" aria-label="Respuesta"><span class="unit">m³</span><button class="btn sm">Verificar</button></div>
+    <details><summary>Ver solución</summary><div>\(R = 1\) m; \(V = 5\left[\arccos(0{,}5) - 0{,}5\sqrt{0{,}75}\right] = \) <b class="ans" data-k="e12"></b> m³, apenas el 19,6 % del total aunque el nivel está al 25 %.</div></details></div>
+</section>
+
+<!-- ================= ESTRUCTURA INFORME ================= -->
+<section class="page" id="infest" data-sec="VIII · Informe" data-title="Estructura y evaluación del informe" hidden>
+  <p class="eyebrow">Sección VIII · Informe</p>
+  <h1>Estructura y evaluación del informe</h1>
+  <p class="lead">El informe se entrega en formato de artículo técnico, en máximo ocho páginas. El generador de la página siguiente arma el documento con tus datos, tablas y gráficas; tú completas el resumen, el análisis y las conclusiones.</p>
+  <h2>Estructura</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Sección</th><th>Contenido esperado</th></tr></thead>
+    <tbody>
+      <tr><td>1. Resumen</td><td>Qué se midió, cómo y cuál fue el resultado principal, en 150 palabras.</td></tr>
+      <tr><td>2. Objetivos</td><td>General y específicos de la guía.</td></tr>
+      <tr><td>3. Marco teórico</td><td>Principio hidrostático y montajes, tiempo de vuelo y velocidad del sonido, sonda capacitiva y oscilador 555, con citas.</td></tr>
+      <tr><td>4. Montaje y procedimiento</td><td>P&amp;ID del montaje con simbología ISA-5.1 y descripción de los pasos.</td></tr>
+      <tr><td>5. Resultados</td><td>Tablas de datos, parámetros ajustados con sus unidades y gráficas con ejes rotulados.</td></tr>
+      <tr><td>6. Análisis</td><td>Respuesta a las preguntas orientadoras y comparación con la teoría y las hojas de datos.</td></tr>
+      <tr><td>7. Conclusiones</td><td>Entre tres y cinco conclusiones que se deduzcan de tus datos.</td></tr>
+      <tr><td>8. Referencias</td><td>Normas y textos consultados, en formato IEEE o APA.</td></tr>
+    </tbody>
+  </table></div>
+  <h2>Rúbrica de evaluación</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Criterio</th><th class="num">Peso</th><th>Desempeño superior</th></tr></thead>
+    <tbody>
+      <tr><td>Toma y presentación de datos</td><td class="num">20 %</td><td>Lecturas suficientes y bien distribuidas en el rango y, en la práctica 2, en la temperatura; tablas con unidades.</td></tr>
+      <tr><td>Ajuste de modelos y cálculos</td><td class="num">25 %</td><td>Densidad, supresión de cero, velocidad del sonido, retardo y permitividad correctos, con R² y unidades.</td></tr>
+      <tr><td>Análisis e interpretación</td><td class="num">25 %</td><td>Explica el efecto de la densidad, de la temperatura del aire y de la capacitancia parásita; propone la recalibración.</td></tr>
+      <tr><td>Ejercicios</td><td class="num">15 %</td><td>Al menos 10 de 12 ejercicios correctos, con procedimiento.</td></tr>
+      <tr><td>Redacción y formato</td><td class="num">15 %</td><td>Texto técnico claro, figuras numeradas y citadas, P&amp;ID con simbología ISA-5.1, referencias completas.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ================= GENERADOR ================= -->
+<section class="page" id="informe" data-sec="VIII · Informe" data-title="Generador del informe" hidden>
+  <p class="eyebrow">Sección VIII · Informe</p>
+  <h1>Generador del informe</h1>
+  <p class="lead">El informe reúne tu identificación, las tablas de las tres prácticas, los parámetros ajustados, las gráficas, tu análisis y el puntaje de los ejercicios. Descárgalo en PDF listo para imprimir o entregar, o cópialo como texto si prefieres editarlo en Word.</p>
+  <div class="grid2">
+    <div class="ctrl"><label for="inf-res">Resumen</label><textarea id="inf-res" placeholder="Qué se midió, cómo y cuál fue el resultado principal."></textarea></div>
+    <div class="ctrl"><label for="inf-con">Conclusiones generales</label><textarea id="inf-con" placeholder="Entre tres y cinco conclusiones basadas en tus datos."></textarea></div>
+  </div>
+  <div class="row" style="margin:16px 0 6px"><button class="btn gold" id="inf-pdf">Descargar informe en PDF</button><button class="btn" id="inf-gen">Actualizar borrador</button><button class="btn" id="inf-copy">Copiar informe (texto)</button><button class="btn" id="inf-csv">Copiar datos (CSV)</button></div>
+  <p class="muted" style="font-size:13px;margin:0 0 16px">El PDF incluye portada, tablas numeradas, las gráficas de las tres prácticas, tu análisis y el puntaje de los ejercicios. Puedes imprimirlo desde cualquier lector de PDF.</p>
+  <div class="paper" id="paper"></div>
+</section>
+
+<!-- ================= REFERENCIAS ================= -->
+<section class="page" id="refs" data-sec="VIII · Informe" data-title="Referencias" hidden>
+  <p class="eyebrow">Referencias</p>
+  <h1>Referencias</h1>
+  <ol>
+    <li>ANSI/ISA-5.1-2009. <em>Instrumentation Symbols and Identification</em>. International Society of Automation.</li>
+    <li>NAMUR NE 43. <em>Standardization of the signal level for the failure information of digital transmitters</em>.</li>
+    <li>Creus Solé, A. (2010). <em>Instrumentación industrial</em> (8.ª ed.). Marcombo.</li>
+    <li>Bentley, J. P. (2005). <em>Principles of Measurement Systems</em> (4.ª ed.). Pearson.</li>
+    <li>Pallás Areny, R. (2003). <em>Sensores y acondicionadores de señal</em> (4.ª ed.). Marcombo.</li>
+    <li>Lipták, B. G. (Ed.) (2003). <em>Instrument Engineers' Handbook, Vol. 1: Process Measurement and Analysis</em> (4.ª ed.). CRC Press.</li>
+    <li>Smith, C. A., y Corripio, A. B. (2006). <em>Control automático de procesos: teoría y práctica</em>. Limusa-Wiley.</li>
+    <li>Fraden, J. (2016). <em>Handbook of Modern Sensors</em> (5.ª ed.). Springer.</li>
+    <li>Texas Instruments. <em>NE555, SA555, SE555 Precision Timers</em>. Hoja de datos.</li>
+    <li>Texas Instruments. <em>XTR115/XTR116: 4–20 mA Current Loop Transmitters</em>. Hoja de datos.</li>
+  </ol>
+  <div class="callout"><b>Nota técnica</b><p>La gravedad de Cartago (9,7778 m/s²) se calculó con la fórmula internacional de la gravedad para 4,75° N y 917 m. La velocidad del sonido sigue el modelo de gas ideal \(c = 331{,}3\sqrt{1 + T/273{,}15}\). La sonda capacitiva usa el modelo del condensador coaxial ideal sin efectos de borde.</p></div>
+</section>
+
+  <nav class="pager" id="pager"></nav>
+  </div><!-- /book -->
+</div><!-- /main -->
+</div><!-- /app -->
+<script src="js/lib/jspdf.umd.min.js"></script>
+<script src="js/lib/jspdf.plugin.autotable.min.js"></script>
+<script src="js/mathjax-config.js"></script>
+<script src="js/lib/tex-svg.js" async></script>
+<script src="js/core.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
